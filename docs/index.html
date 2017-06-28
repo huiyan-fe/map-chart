@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+
+    <style type="text/css">
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="map"></div>
+
+    <script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=1XjLLEhZhQNUzd93EjU5nOGQ"></script>
+    <script type="text/javascript" src="echarts.min.js"></script>
+    <script type="text/javascript" src="../echarts-overlay.js"></script>
+
+    <script type="text/javascript">
+
+        // 百度地图API功能
+        var map = new BMap.Map("map", {
+            enableMapClick: false
+        });    // 创建Map实例
+        map.centerAndZoom(new BMap.Point(105.403119, 38.028658), 5);  // 初始化地图,设置中心点坐标和地图级别
+        map.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
+
+        map.setMapStyle({
+            styleJson: [
+                {
+                    "featureType": "all",
+                    "elementType": "all",
+                    "stylers": {
+                        "lightness": 61,
+                        "saturation": -100
+                    }
+                }
+            ]
+        });
+
+        var echartsOverlay = new EchartsOverlay({
+            point: new BMap.Point(116.407845, 39.914101),
+            width: 150,
+            height: 180,
+            chartOption: {
+                tooltip : {
+                    trigger: 'axis',
+                    axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                        type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                    }
+                },
+                xAxis : [
+                    {
+                        type : 'category',
+                        splitLine: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        data : ['数据', '数据2', '数据3'],
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'直接访问',
+                        type:'bar',
+                        barWidth: '60%',
+                        data:[10, 52, 200]
+                    }
+                ]
+            }
+        });
+        map.addOverlay(echartsOverlay);
+
+        var echartsOverlay = new EchartsOverlay({
+            point: new BMap.Point(121.506357, 31.167855),
+            width: 200,
+            height: 200,
+            chartOption: {
+                tooltip : {
+                    trigger: 'item',
+                    formatter: "{a} <br/>{b} : {c} ({d}%)"
+                },
+                series : [
+                    {
+                        name: '访问来源',
+                        type: 'pie',
+                        radius: '30%',
+                        data:[
+                            {value:335, name:'直接'},
+                            {value:310, name:'邮件'},
+                            {value:234, name:'联盟'},
+                            {value:135, name:'视频'},
+                            {value:1548, name:'搜索'}
+                        ],
+                        itemStyle: {
+                            emphasis: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        }
+                    }
+                ]
+            }
+        });
+        map.addOverlay(echartsOverlay);
+
+        var echartsOverlay = new EchartsOverlay({
+            point: new BMap.Point(106.494162, 29.572616),
+            width: 150,
+            height: 150,
+            chartOption: {
+                xAxis : [
+                    {
+                        type : 'category',
+                        boundaryGap : false,
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: true
+                        },
+                        data : ['周一','周二','周三','周四','周五','周六','周日']
+                    }
+                ],
+                yAxis : [
+                    {
+                        type : 'value',
+                        splitLine: {
+                            show: false
+                        },
+                        axisTick: {
+                            show: false
+                        },
+                        axisLine: {
+                            show: false
+                        },
+                        axisLabel: {
+                            show: false
+                        }
+                    }
+                ],
+                series : [
+                    {
+                        name:'搜索引擎',
+                        type:'line',
+                        data:[820, 932, 901, 934, 1290, 1330, 1320]
+                    }
+                ]
+            }
+        });
+        map.addOverlay(echartsOverlay);
+    </script>
+    
+</body>
+</html>
+
