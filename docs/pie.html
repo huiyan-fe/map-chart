@@ -17,6 +17,12 @@
             width: 100%;
             height: 100%;
         }
+
+        #panel {
+            position: absolute;
+            left: 0;
+            top: 0;
+        }
     </style>
 </head>
 <body>
@@ -28,6 +34,54 @@
     <script type="text/javascript" src="echarts.min.js"></script>
     <script type="text/javascript" src="echarts-overlay.js"></script>
     <script src="//huiyan-fe.github.io/mapv/build/mapv.min.js"></script>
+    <div id="panel">
+    <textarea id="textarea" 'name'="" rows="10" cols="30">
+        [
+            {
+                "center": "北京",
+                "data": [
+                    {"name": "工作日型", "value": 11.74},
+                    {"name": "均衡型", "value": 51.64},
+                    {"name": "周末型", "value": 36.62}
+                ]
+            },
+            {
+                "center": "上海",
+                "data": [
+                    {"name": "工作日型", "value": 14.14},
+                    {"name": "均衡型", "value": 48.99},
+                    {"name": "周末型", "value": 36.87}
+                ]
+            },
+            {
+                "center": "108.816024,22.643885",
+                "data": [
+                    {"name": "工作日型", "value": 8.22},
+                    {"name": "均衡型", "value": 45.21},
+                    {"name": "周末型", "value": 46.58}
+                ]
+            },
+            {
+                "center": "117.218284,22.438799",
+                "data": [
+                    {"name": "工作日型", "value": 12.71},
+                    {"name": "均衡型", "value": 40.68},
+                    {"name": "周末型", "value": 46.61}
+                ]
+            },
+            {
+                "center": "成都",
+                "data": [
+                    {"name": "工作日型", "value": 19.39},
+                    {"name": "均衡型", "value": 48.98},
+                    {"name": "周末型", "value": 31.63}
+                ]
+            }
+        ]
+    </textarea>
+    <br />
+    <button id="showBtn">显示</button>
+    </div>
 
     <script type="text/javascript">
         var chinaLayer = null;
@@ -41,6 +95,7 @@
                 //fillStyle: 'lightblue',
                 //fillStyle: 'rgba(50, 50, 50, 0.5)',
                 //strokeStyle: '#999',
+                enableMassClear: false,
                 strokeStyle: 'rgba(255, 255, 255, 1)',
                 lineWidth: 1,
                 zIndex: -2,
@@ -81,104 +136,80 @@
         });
         map.getContainer().style.background = '#fff';
 
-        var datas = [
-            {
-                center: '北京',
-                data: [
-                    {name: '工作日型', value: 11.74},
-                    {name: '均衡型', value: 51.64},
-                    {name: '周末型', value: 36.62}
-                ]
-            },
-            {
-                center: '上海',
-                data: [
-                    {name: '工作日型', value: 14.14},
-                    {name: '均衡型', value: 48.99},
-                    {name: '周末型', value: 36.87}
-                ]
-            },
-            {
-                center: '108.816024,22.643885',
-                data: [
-                    {name: '工作日型', value: 8.22},
-                    {name: '均衡型', value: 45.21},
-                    {name: '周末型', value: 46.58}
-                ]
-            },
-            {
-                center: '117.218284,22.438799',
-                data: [
-                    {name: '工作日型', value: 12.71},
-                    {name: '均衡型', value: 40.68},
-                    {name: '周末型', value: 46.61}
-                ]
-            },
-            {
-                center: '成都',
-                data: [
-                    {name: '工作日型', value: 19.39},
-                    {name: '均衡型', value: 48.98},
-                    {name: '周末型', value: 31.63}
-                ]
-            }
-        ]
+        function dealData(datas) {
 
-        datas.map(function (item) {
-            if (item.center.indexOf(',') > -1) {
-                var center = item.center.split(',');
-                center = {
-                    lng: center[0],
-                    lat: center[1]
+            datas.map(function (item) {
+                if (item.center.indexOf(',') > -1) {
+                    var center = item.center.split(',');
+                    center = {
+                        lng: center[0],
+                        lat: center[1]
+                    }
+                } else {
+                    var center = mapv.utilCityCenter.getCenterByCityName(item.center);
                 }
-            } else {
-                var center = mapv.utilCityCenter.getCenterByCityName(item.center);
-            }
 
-                
-            var echartsOverlay = new EchartsOverlay({
-                point: new BMap.Point(center.lng, center.lat),
-                width: 190,
-                height: 190,
-                chartOption: {
-                    tooltip : {
-                        trigger: 'item',
-                        formatter: "{a} <br/>{b} : {c} ({d}%)"
-                    },
-                    color: ['#ed996d', '#f6d47d', '#e9fb8a'],
-                    label: {
-                        normal: {
-                            textStyle: {
-                                color: '#333'
-                            }
-                        }
-                    },
-                    markLine: {
-                        lineStyle: {
+                    
+                var echartsOverlay = new EchartsOverlay({
+                    point: new BMap.Point(center.lng, center.lat),
+                    width: 190,
+                    height: 190,
+                    chartOption: {
+                        tooltip : {
+                            trigger: 'item',
+                            formatter: "{a} <br/>{b} : {c} ({d}%)"
+                        },
+                        color: ['#ed996d', '#f6d47d', '#e9fb8a'],
+                        label: {
                             normal: {
-                                color: '#333'
-                            }
-                        }
-                    },
-                    series : [
-                        {
-                            name: '值',
-                            type: 'pie',
-                            radius: '30%',
-                            data: item.data,
-                            itemStyle: {
-                                emphasis: {
-                                    shadowBlur: 10,
-                                    shadowOffsetX: 0,
-                                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                textStyle: {
+                                    color: '#333'
                                 }
                             }
-                        }
-                    ]
-                }
+                        },
+                        markLine: {
+                            lineStyle: {
+                                normal: {
+                                    color: '#333'
+                                }
+                            }
+                        },
+                        series : [
+                            {
+                                'name': '值',
+                                type: 'pie',
+                                radius: '30%',
+                                data: item.data,
+                                itemStyle: {
+                                    emphasis: {
+                                        shadowBlur: 10,
+                                        shadowOffsetX: 0,
+                                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                });
+                map.addOverlay(echartsOverlay);
             });
-            map.addOverlay(echartsOverlay);
+
+        }
+
+        
+
+        $('#showBtn').bind('click', function () {
+            showData();
         });
+
+        function showData() {
+            var val = $('#textarea').val();
+            var json = JSON.parse(val);
+            map.clearOverlays();
+            dealData(json);
+        }
+
+        showData();
 
 
     </script>
