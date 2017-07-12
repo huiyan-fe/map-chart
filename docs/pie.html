@@ -80,6 +80,10 @@
         ]
     </textarea>
     <br />
+    <textarea id="color">
+    #ed996d|#f6d47d|#e9fb8a
+    </textarea>
+    <br />
     <button id="showBtn">显示</button>
     </div>
 
@@ -159,7 +163,7 @@
                             trigger: 'item',
                             formatter: "{a} <br/>{b} : {c} ({d}%)"
                         },
-                        color: ['#ed996d', '#f6d47d', '#e9fb8a'],
+                        color: $('#color').val().split('|'),
                         label: {
                             normal: {
                                 textStyle: {
