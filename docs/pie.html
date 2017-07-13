@@ -156,8 +156,8 @@
                     
                 var echartsOverlay = new EchartsOverlay({
                     point: new BMap.Point(center.lng, center.lat),
-                    width: 190,
-                    height: 190,
+                    width: 200,
+                    height: 200,
                     chartOption: {
                         tooltip : {
                             trigger: 'item',
@@ -166,7 +166,23 @@
                         color: $('#color').val().split('|'),
                         label: {
                             normal: {
+                                formatter: "{d}%",
                                 textStyle: {
+                                    color: '#333'
+                                }
+                            },
+                            emphasis: {
+                                formatter: "{d}%",
+                                textStyle: {
+                                    color: '#333'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            normal: {
+                                length: 0,
+                                length2: 1,
+                                lineStyle: {
                                     color: '#333'
                                 }
                             }
@@ -185,6 +201,12 @@
                                 radius: '30%',
                                 data: item.data,
                                 itemStyle: {
+                                    normal: {
+                                        labelLine:{
+                                            length: 8,
+                                            length2: 5
+                                        }
+                                    },
                                     emphasis: {
                                         shadowBlur: 10,
                                         shadowOffsetX: 0,
